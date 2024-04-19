@@ -10,6 +10,7 @@ class Promotion(models.Model):
 
 class Collection(models.Model):
   title = models.CharField(max_length=255)
+  featured_product = models.ForeignKey('Product',on_delete=models.SET_NULL,null=True,related_name='+')
 
 class Product(models.Model):
   # fields of the class
@@ -28,7 +29,7 @@ class Customer(models.Model):
   MEMBERSHIP_SILVER='S'
   MEMBERSHIP_GOLD='D'
   MEMBERSHIP_CHOICES=[
-    (MEMBERSHIP_BROZE,'Bronze'),
+    (MEMBERSHIP_BRONZE,'Bronze'),
     (MEMBERSHIP_SILVER,'Silver'),
     (MEMBERSHIP_GOLD,'Gold')
   ]
