@@ -4,18 +4,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from store.models import Product
 
 def say_hello(request):
+    # filtering in detail
+    # 
+    #queryset =Product.objects.filter(unit_price__gt=20)
+    # queryset =Product.objects.filter(collection__id__range=(1,2,3))
+    #queryset =Product.objects.filter(last_update__year=2021)
+    queryset = Product.objects.filter(description__isnull=True)
+    
+    
 
-    # Retrieving methods such as get(),all(),filter()
-    # try catch incase if the object value in store_product table doesn't exist
-    # try:
-    #     product=Product.objects.get(pk=0)
-    # except ObjectDoesNotExist:
-    #     pass
-
-    # Alternate way is use filter() and retrieve first(), if it doesn't find , it returns None
-    #product=Product.objects.filter(pk=0).first()
-
-    # sometimes we want to check if the object exist/no
-    product=Product.objects.filter(pk=0).exists()
-
-    return render(request, 'hello.html', {'name': 'Mosh'})
+    return render(request, 'hello.html', {'name': 'Mosh','products':list(queryset)})
