@@ -5,17 +5,12 @@ from django.db.models import Q,F
 from store.models import Product
 
 def say_hello(request):
-    # sorting 
-    # ascending
-    # queryset=Product.objects.order_by('title')
-    # descending sort
-    # order_by returns a query_set and it will evaluated lazy
-    queryset=Product.objects.order_by('unit_price','-title')
+    # Limiting the results
+    queryset=Product.objects.all()[:5]
 
-    # earliest --> returns the first record itself by sorting in asc order --> similar to order_by('column')[0]
-    product1=Product.objects.earliest('unit_price')
+    # limit 5 and offset 5
+    queryset2=Product.objects.all()[5:10]
 
-    # latest --> returns the first record itself by sorting in desc order --> similar to order_by('-column')[0]
-    product2=Product.objects.latest('unit_price')
+    
 
-    return render(request, 'hello.html', {'name': 'Mosh','products':list(queryset),'product1':product1,'product2':product2})
+    return render(request, 'hello.html', {'name': 'Mosh','products':list(queryset),'products2':list(queryset2)})
