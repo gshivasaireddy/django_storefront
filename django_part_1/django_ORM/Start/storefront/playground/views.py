@@ -5,8 +5,17 @@ from django.db.models import Q,F
 from store.models import Product
 
 def say_hello(request):
-    # F objects - used to compare fields and filter it
-    # queryset=Product.objects.filter(inventory=F('unit_price'))
-    queryset=Product.objects.filter(inventory=F('collection__id'))
+    # sorting 
+    # ascending
+    # queryset=Product.objects.order_by('title')
+    # descending sort
+    # order_by returns a query_set and it will evaluated lazy
+    queryset=Product.objects.order_by('unit_price','-title')
 
-    return render(request, 'hello.html', {'name': 'Mosh','products':list(queryset)})
+    # earliest --> returns the first record itself by sorting in asc order --> similar to order_by('column')[0]
+    product1=Product.objects.earliest('unit_price')
+
+    # latest --> returns the first record itself by sorting in desc order --> similar to order_by('-column')[0]
+    product2=Product.objects.latest('unit_price')
+
+    return render(request, 'hello.html', {'name': 'Mosh','products':list(queryset),'product1':product1,'product2':product2})
