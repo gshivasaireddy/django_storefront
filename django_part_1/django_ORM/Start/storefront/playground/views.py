@@ -3,11 +3,15 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q,F
 from django.db.models.aggregates import Count,Max,Min,Avg,Sum
-from store.models import Product,OrderItem,Order
+from django.db.models.expressions import Value,F
+from store.models import Product,OrderItem,Order,Customer
 
 def say_hello(request):
-    # Aggregating Objects
-    result=Product.objects.filter(collection__id=1).aggregate(count=Count('id'),min_price=Min('unit_price'))
+    # Annotating Objects
+    # queryset=Customer.objects.annotate(is_new=Value(True))
 
-    return render(request, 'hello.html', {'name': 'Mosh','result':result},
+    # case-2 : Annotating with another field
+    queryset=Customer.objects.annotate(is_new=F('id')+1)
+
+    return render(request, 'hello.html', {'name': 'Mosh','result':list(queryset)},
     )
