@@ -10,14 +10,7 @@ from tags.models import TaggedItem
 from store.models import Product,OrderItem,Order,Customer
 
 def say_hello(request):
-    # Querying Generic Relationships
-    content_type=ContentType.objects.get_for_model(Product) #returns the row corresponding the content_type of Product class/model
-
-    # filter for tagged item using content_type of Product
-    queryset=TaggedItem.objects.select_related('tag').filter(
-        content_type=content_type, # to map to Product
-        object_id=1   # pass the product_id to get its tags
-    ) # returns the list of tags for product_id=1
+    queryset=TaggedItem.objects.get_tags_for(Product,1)
 
     return render(request, 'hello.html', {'name': 'Mosh','result':list(queryset)},
     )
