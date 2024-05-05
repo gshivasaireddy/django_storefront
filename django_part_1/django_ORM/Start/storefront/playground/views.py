@@ -10,7 +10,11 @@ from tags.models import TaggedItem
 from store.models import Product,OrderItem,Order,Customer
 
 def say_hello(request):
-    queryset=TaggedItem.objects.get_tags_for(Product,1)
+    # Queryset caching example
+    queryset=Product.objects.all()
+    queryset[0] # indexing queryset first
+    list(queryset)
+    
 
-    return render(request, 'hello.html', {'name': 'Mosh','result':list(queryset)},
+    return render(request, 'hello.html', {'name': 'Mosh'},
     )
