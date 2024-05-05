@@ -9,19 +9,10 @@ from store.models import Product,OrderItem,Order,Customer
 
 def say_hello(request):
     # Annotating Objects
-    # queryset=Customer.objects.annotate(is_new=Value(True))
-
-    # case-2 : Annotating with another field
-    # queryset=Customer.objects.annotate(is_new=F('id')+1)
-
-    # case-3: Annotating with Database Func Expressions
-    # queryset=Customer.objects.annotate(
-    #     # CONCAT first_name and last_name with a space in b/w
-    #     full_name=Func(F('first_name'),Value(' '),F('last_name'),function='CONCAT')
-    # )
-
-    # Alternate way
-    queryset=Customer.objects.annotate(full_name=Concat('first_name',Value(' '),'last_name'))
+    # Grouping objects
+    queryset=Customer.objects.annotate(
+        orders_count=Count('order')
+    )
 
     return render(request, 'hello.html', {'name': 'Mosh','result':list(queryset)},
     )
