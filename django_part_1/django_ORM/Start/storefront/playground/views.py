@@ -7,25 +7,21 @@ from django.db.models.expressions import Value,F,Func,ExpressionWrapper
 from django.db.models.functions import Concat
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
+from django.db import connection
 from tags.models import TaggedItem
 from store.models import Product,OrderItem,Order,Customer,Collection
 
-# @transaction.atomic() --> use it as decorator to makes the whole fn atomic
 def say_hello(request):
-    # ...
+    # Executing RAW SQL Queries
+    queryset=Product.objects.raw('SELECT * FROM store_product')
+    
+    # this raw sql query returns a queryset which is different from other querysets, this won't contain any methods which regular queryset contains
 
-    # Transactions
-    with transaction.atomic():
-        order=Order()
-        order.customer_id=1
-        order.save()
+    # To deal with queries which don't involve django models
+    # with connection.cursor() as cursor:
+    #      cursor.execute()
+    #      cursor.callproc('get_customers',[1,2,'a']) # execute the stored procedure which exists in DB
 
-        item=OrderItem()
-        item.order=order
-        item.product_id=-1 # product_id=-1 doesn't exist it throws integrity issue
-        item.quantity=1
-        item.unit_price=10
-        item.save()
 
-    return render(request, 'hello.html', {'name': 'Mosh'},
+    return render(request, 'hello.html', {'name': 'Mosh','result':list(queryset)},
     )
