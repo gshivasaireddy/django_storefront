@@ -10,17 +10,12 @@ from tags.models import TaggedItem
 from store.models import Product,OrderItem,Order,Customer,Collection
 
 def say_hello(request):
-    # Updating objects 
-    # collection = Collection(pk=11)
-    # collection.featured_product=None
-    # collection.save()
+    # Deleting objects
+    collection=Collection(pk=11)
+    collection.delete()
 
-    # collection=Collection.objects.get(pk=11)
-    # collection.featured_product=None
-    # collection.save()
-
-    # update method
-    Collection.objects.filter(pk=11).update(featured_product=None)
+    # alternate way delete entire queryset
+    Collection.objects.filter(id__gt=5).delete()
 
     return render(request, 'hello.html', {'name': 'Mosh'},
     )
