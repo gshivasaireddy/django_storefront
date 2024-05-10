@@ -10,23 +10,17 @@ from tags.models import TaggedItem
 from store.models import Product,OrderItem,Order,Customer,Collection
 
 def say_hello(request):
-    # Creating objects 
-    collection = Collection()
-    # method-1 to set the value
-    collection.title='Video Games'
-    collection.featured_product_id=1
-    
-    # method-2 to set the value
-    # collection.featured_product=Product(pk=1)
-    
-    
-    # in both the cases the product with value=1 should exist
-    # save() method inserts the data into DB
-    collection.save()
+    # Updating objects 
+    # collection = Collection(pk=11)
+    # collection.featured_product=None
+    # collection.save()
 
-    # alternate way of doing using create()
-    #collection=Collection.objects.create(title='a',featured_product_id=1)
-    
+    # collection=Collection.objects.get(pk=11)
+    # collection.featured_product=None
+    # collection.save()
+
+    # update method
+    Collection.objects.filter(pk=11).update(featured_product=None)
 
     return render(request, 'hello.html', {'name': 'Mosh'},
     )
