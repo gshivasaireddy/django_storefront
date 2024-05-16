@@ -5,6 +5,28 @@ from django.urls import reverse
 from . import models
 
 # Register your models here.
+
+# custom Filter on Inventory
+class InventoryFilter(admin.SimpleListFilter):
+  title='inventory'  # title of the filter
+  parameter_name='inventory'    # this is used in query string of url
+
+  # this function allows what options should appear under filter
+  def lookups(self,request,model_admin):
+    # return super().lookups(request,model_admin) # default definition
+    # overwrite the lookups
+    return [
+      ('<10','Low')  # (filter value,human readable form to display)
+
+    ]
+
+  def queryset(self,request,queryset):
+    # return super().queryset(request,queryset) # default definition
+    # override the logic
+    # filtering logic on queryset
+    if self.value()=='<10':
+      return queryset.filter(inventory__lt=10)
+     
 # this class helps how we wanna view product on admin page
 @admin.register(models.Product) # method-1
 class ProductAdmin(admin.ModelAdmin):
@@ -12,6 +34,8 @@ class ProductAdmin(admin.ModelAdmin):
   list_editable=['unit_price']
   list_per_page=10
   list_select_related=['collection']
+  list_filter=['collection','last_update',InventoryFilter]
+
 
   def collection_title(self,product):
     return product.collection.title  # related obj 
